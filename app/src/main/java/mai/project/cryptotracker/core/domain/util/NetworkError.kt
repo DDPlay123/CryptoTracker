@@ -4,7 +4,7 @@ enum class NetworkError : Error {
 
     REQUEST_TIMEOUT,
     TOO_MANY_REQUESTS,
-    NO_INTENT,
+    NO_INTERNET,
     SERVER_ERROR,
     SERIALIZATION,
     UNKNOWN;

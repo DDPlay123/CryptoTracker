@@ -1,7 +1,6 @@
 package mai.project.cryptotracker.crypto.presentation.coin_list
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
 import mai.project.cryptotracker.crypto.presentation.coin_list.components.CoinListItem
 import mai.project.cryptotracker.crypto.presentation.coin_list.components.previewCoin
 import mai.project.cryptotracker.ui.theme.CryptoTrackerTheme
@@ -35,8 +33,7 @@ fun CoinListScreen(
     } else {
         LazyColumn(
             modifier = modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .fillMaxSize()
         ) {
             items(state.coins) { coinUi ->
                 CoinListItem(

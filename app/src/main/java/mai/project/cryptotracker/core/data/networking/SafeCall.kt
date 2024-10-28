@@ -14,7 +14,7 @@ suspend inline fun <reified T> safeCall(
     val response = try {
         execute()
     } catch (e: UnresolvedAddressException) {
-        return Result.Error(NetworkError.NO_INTENT)
+        return Result.Error(NetworkError.NO_INTERNET)
     } catch (e: SerializationException) {
         return Result.Error(NetworkError.SERIALIZATION)
     } catch (e: Exception) {
