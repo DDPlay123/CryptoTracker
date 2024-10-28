@@ -1,4 +1,4 @@
-package mai.project.cryptotracker.util
+package mai.project.cryptotracker.core.presentation.util
 
 import mai.project.cryptotracker.R
 

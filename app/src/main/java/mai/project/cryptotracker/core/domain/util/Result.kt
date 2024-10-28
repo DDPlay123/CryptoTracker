@@ -1,4 +1,4 @@
-package mai.project.cryptotracker.util
+package mai.project.cryptotracker.core.domain.util
 
 typealias DomainError = Error
 
