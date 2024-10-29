@@ -17,7 +17,9 @@ import kotlinx.coroutines.launch
 import mai.project.cryptotracker.core.domain.util.onError
 import mai.project.cryptotracker.core.domain.util.onSuccess
 import mai.project.cryptotracker.crypto.domain.CoinDataSource
+import mai.project.cryptotracker.crypto.presentation.model.CoinUi
 import mai.project.cryptotracker.crypto.presentation.model.toCoinUi
+import java.time.ZonedDateTime
 
 class CoinListViewModel(
     private val coinDataSource: CoinDataSource
@@ -36,10 +38,29 @@ class CoinListViewModel(
 
     fun onAction(action: CoinListAction) {
         when (action) {
-            CoinListAction.OnRefresh -> loadCoins()
+            is CoinListAction.OnCoinClick -> selectCoin(coinUi = action.coinUi)
 
-            is CoinListAction.OnCoinClick ->
-                _state.update { it.copy(selectedCoin = action.coinUi) }
+            CoinListAction.OnRefresh -> loadCoins()
+        }
+    }
+
+    private fun selectCoin(coinUi: CoinUi) {
+        _state.update { it.copy(selectedCoin = coinUi) }
+
+        viewModelScope.launch {
+            coinDataSource
+                .getCoinHistory(
+                    coinId = coinUi.id,
+                    start = ZonedDateTime.now().minusDays(5),
+                    end = ZonedDateTime.now()
+                )
+                .onSuccess { history ->
+                    // TODO: Update selected coin history
+                    println(history)
+                }
+                .onError { error ->
+                    _events.send(CoinListEvent.Error(error))
+                }
         }
     }
 
