@@ -17,9 +17,11 @@ import kotlinx.coroutines.launch
 import mai.project.cryptotracker.core.domain.util.onError
 import mai.project.cryptotracker.core.domain.util.onSuccess
 import mai.project.cryptotracker.crypto.domain.CoinDataSource
+import mai.project.cryptotracker.crypto.presentation.coin_detail.DataPoint
 import mai.project.cryptotracker.crypto.presentation.model.CoinUi
 import mai.project.cryptotracker.crypto.presentation.model.toCoinUi
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class CoinListViewModel(
     private val coinDataSource: CoinDataSource
@@ -55,8 +57,24 @@ class CoinListViewModel(
                     end = ZonedDateTime.now()
                 )
                 .onSuccess { history ->
-                    // TODO: Update selected coin history
-                    println(history)
+                    val dataPoints = history
+                        .sortedBy { it.dateTime }
+                        .map {
+                            DataPoint(
+                                x = it.dateTime.hour.toFloat(),
+                                y = it.priceUsd.toFloat(),
+                                xLabel = DateTimeFormatter
+                                    .ofPattern("ha\nM/d")
+                                    .format(it.dateTime)
+                            )
+                        }
+                    _state.update {
+                        it.copy(
+                            selectedCoin = it.selectedCoin?.copy(
+                                coinPriceHistory = dataPoints
+                            )
+                        )
+                    }
                 }
                 .onError { error ->
                     _events.send(CoinListEvent.Error(error))
